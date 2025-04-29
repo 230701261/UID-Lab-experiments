@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Validation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h2>Contact Form</h2>
+  <form id="myForm">
+    <input type="text" id="email" placeholder="Enter your email" />
+    <div id="emailError" class="error"></div>
+
+    <input type="text" id="phone" placeholder="Enter your phone number" />
+    <div id="phoneError" class="error"></div>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<!-- Validator.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
+<script>
+  const form = document.getElementById("myForm");
+  const emailInput = document.getElementById("email");
+  const phoneInput = document.getElementById("phone");
+  const emailError = document.getElementById("emailError");
+  const phoneError = document.getElementById("phoneError");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Clear previous errors
+    emailError.textContent = "";
+    phoneError.textContent = "";
+
+    let isValid = true;
+
+    // Validate email
+    if (!validator.isEmail(emailInput.value)) {
+      emailError.textContent = "Please enter a valid email address.";
+      isValid = false;
+    }
+
+    // Validate phone number (simple check for mobile format)
+    if (!validator.isMobilePhone(phoneInput.value, 'any')) {
+      phoneError.textContent = "Please enter a valid phone number.";
+      isValid = false;
+    }
+
+    if (isValid) {
+      alert("Form submitted successfully!");
+      form.reset();
+    }
+  });
+</script>
+
+</body>
+</html>

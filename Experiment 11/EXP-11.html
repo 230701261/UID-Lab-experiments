@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventory Management Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+    .chart-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chart-container">
+  <h2>Stock Levels by Product</h2>
+  <canvas id="barChart"></canvas>
+</div>
+
+<div class="chart-container">
+  <h2>Product Categories</h2>
+  <canvas id="pieChart"></canvas>
+</div>
+
+<div class="chart-container">
+  <h2>Price vs Quantity</h2>
+  <canvas id="scatterChart"></canvas>
+</div>
+
+<script>
+  // Dummy Inventory Data
+  const inventory = [
+    { name: "Laptops", category: "Electronics", stock: 25, price: 800 },
+    { name: "Headphones", category: "Electronics", stock: 60, price: 100 },
+    { name: "Chairs", category: "Furniture", stock: 40, price: 70 },
+    { name: "Desks", category: "Furniture", stock: 20, price: 150 },
+    { name: "Pens", category: "Stationery", stock: 100, price: 2 },
+    { name: "Notebooks", category: "Stationery", stock: 80, price: 5 }
+  ];
+
+  // Bar Chart - Stock Levels
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels: inventory.map(item => item.name),
+      datasets: [{
+        label: 'Stock',
+        data: inventory.map(item => item.stock),
+        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 10 }
+        }
+      }
+    }
+  });
+
+  // Pie Chart - Category Distribution
+  const categoryCount = {};
+  inventory.forEach(item => {
+    categoryCount[item.category] = (categoryCount[item.category] || 0) + 1;
+  });
+
+  new Chart(document.getElementById('pieChart'), {
+    type: 'pie',
+    data: {
+      labels: Object.keys(categoryCount),
+      datasets: [{
+        data: Object.values(categoryCount),
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+      }]
+    },
+    options: {
+      responsive: true
+    }
+  });
+
+  // Scatter Chart - Price vs Quantity
+  new Chart(document.getElementById('scatterChart'), {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Price vs Quantity',
+        data: inventory.map(item => ({ x: item.price, y: item.stock })),
+        backgroundColor: 'rgba(255, 99, 132, 0.7)'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: 'Price ($)' } },
+        y: { title: { display: true, text: 'Stock Quantity' } }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
